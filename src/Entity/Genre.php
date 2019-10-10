@@ -5,14 +5,16 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Serializer\Annotation\Groups;
+//use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\GenreRepository")
- * @ApiResource()
+ * @ApiResource( )
  * @UniqueEntity(
  *    fields={"libelle"},
  *    message="Il existe déjà un genre avec ce libelle {{ value }}, veuillez saisir un autre libellé."
@@ -24,21 +26,19 @@ class Genre
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"listGenreSimple","listGenrefull"})
      * 
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"listGenreSimple","listGenrefull"})
-     * @Assert\Length(min=2, minMessage = "le libellé doit contenir au moins {{ limit }} caractères")
+      * @Assert\Length(min=2, minMessage = "le libellé doit contenir au moins {{ limit }} caractères")
      */
     private $libelle;
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\Livre", mappedBy="genre")
-     * @Groups({"listGenrefull"})
+     * @ApiSubresource
      */
     private $livres;
 

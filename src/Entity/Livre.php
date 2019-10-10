@@ -3,10 +3,62 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiFilter;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+//use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\LivreRepository")
+ * @ApiResource(
+ *     attributes={
+ *         "order"= {
+ *              
+ *              "prix":"DESC"
+ *            }
+ *  })
+ * @ApiFilter(
+ *     SearchFilter::class,
+ *     properties={
+ *            "titre":"ipartial",
+ *            "auteur":"exact"
+ *     }
+ * )
+ * @ApiFilter(
+ *     RangeFilter::class,
+ *     properties={
+ *            "prix"
+ *            
+ *     }
+ * )
+ * @ApiFilter(
+ *     OrderFilter::class,
+ *     properties={
+ *  "auteur.nom"="desc",
+ *            "titre"="asc"
+ *             
+ *            
+ *     }
+ * )
+ * 
+ *@ApiFilter(
+ *     PropertyFilter::class,
+ *     arguments={
+ *       "parameterName":"properties",
+ *       "overrideDefaultProperties":false,
+ *            "whitelist"= {
+ *                          "isbn",
+ *                          "titre",
+ *                          "prix"
+ *                  }
+ *             
+ *            
+ *     }
+ * )
+ * 
  */
 class Livre
 {
@@ -14,52 +66,38 @@ class Livre
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"listGenrefull"})
-     * @Groups({"listAuteurfull"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"listGenrefull"})
-     * @Groups({"listAuteurfull"})
-     */
+   */
     private $isbn;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"listGenrefull"})
-     * @Groups({"listAuteurfull"})
-     */
+    */
     private $titre;
 
     /**
      * @ORM\Column(type="float")
-     * @Groups({"listGenrefull"})
-     * @Groups({"listAuteurfull"})
-     */
+      */
     private $prix;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Editeur", inversedBy="livres")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"listGenrefull"})
-     * @Groups({"listAuteurfull"})
-     */
+      */
     private $editeur;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
-     * @Groups({"listGenrefull"})
-     * @Groups({"listAuteurfull"})
      */
     private $annee;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Groups({"listGenrefull"})
-     * @Groups({"listAuteurfull"})
-     */
+      */
     private $langue;
 
     /**
